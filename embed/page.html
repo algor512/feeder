@@ -106,7 +106,7 @@
 	  {{ if and (ge $prevDay 0) (ne $curDay $prevDay) }}<hr />{{ end }}
 	  {{ $prevDay = $curDay }}
 	  <article class="{{range $c := $rec.Tags}}{{$c}} {{end}}">
-		<time>{{$rec.CollectDate.Format "2006-01-02 15:04"}}:</time>
+		<time>{{$rec.Date.Local.Format "2006-01-02 15:04"}}:</time>
 		<a href="{{$rec.Url}}" target="_blank">{{$rec.Title}}</a>
 		<cite>({{$rec.Source}})</cite>
 	  </article>
