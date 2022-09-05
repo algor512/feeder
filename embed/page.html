@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>Feed</title>
+	<style>
+	  @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
+	  body {
+		  background-color: #333333;
+		  color: #eeeeee;
+		  font-family: 'Roboto Mono', monospace;
+		  font-size: 16pt;
+		  display: flex;
+		  flex-direction: column;
+	  }
+	  a {
+		  color: inherit;
+		  font-family: inherit;
+		  text-decoration: none;
+	  }
+
+	  nav {
+		  width: 90%;
+		  margin: 0 auto 0.5em auto;
+		  padding: 0;
+		  display: flex;
+		  flex-direction: row;
+	  }
+	  nav > a {
+		  display: block;
+		  flex-grow: 1;
+		  text-align: center;
+		  padding: 0.2em;
+		  color: #c0c0c0;
+		  background-color: #262626;
+	  }
+	  nav > a#active {
+		  color: #eeeeee;
+		  background-color: #333333;
+	  }
+	  nav > a:last-child {
+		  border-radius: 0 10px 0 0;
+	  }
+	  nav > a:first-child {
+		  border-radius: 10px 0 0 0;
+	  }
+
+	  main {
+		  width: 90%;
+		  margin: 0 auto 1em auto;
+		  display: flex;
+		  flex-direction: column;
+	  }
+	  article {
+		  width: 100%;
+		  padding-bottom: 0.2em;
+	  }
+	  article time, cite {
+		  color: #c0c0c0;
+		  font-style: normal;
+	  }
+
+	  hr {
+		  width: 60%;
+		  height: 1px;
+		  margin: 0.8em auto 1em;
+		  border: 0 none;
+		  background-color: #4c4c4c;
+	  }
+
+	  @media (max-width: 1000px) {
+		  body {
+			  font-size: 12pt;
+		  }
+		  nav {
+			  width: 98%;
+		  }
+		  main {
+			  width: 98%;
+		  }
+		  article {
+			  padding-bottom: 1em;
+		  }
+		  hr {
+			  width: 90%;
+			  margin-top: 1em;
+			  margin-bottom: 2em;
+		  }
+	  }
+	</style>
+  </head>
+  <body>
+	<nav>
+		<a href="/rss"{{if (eq .CurrentPage "rss")}} id="active"{{end}}>RSS</a>
+		<a href="/youtube"{{if (eq .CurrentPage "youtube")}} id="active"{{end}}>YouTube</a>
+		<a href="/telegram"{{if (eq .CurrentPage "telegram")}} id="active"{{end}}>Telegram</a>
+	</nav>
+	<main>
+	  {{- $prevDay := -1 -}}
+	  {{- $curDay := -1 -}}
+	  {{- range $idx, $rec := .Records -}}
+	  {{- $curDay = $rec.Date.Local.YearDay -}}
+	  {{ if and (ge $prevDay 0) (ne $curDay $prevDay) }}<hr />{{ end }}
+	  {{ $prevDay = $curDay }}
+	  <article class="{{range $c := $rec.Tags}}{{$c}} {{end}}">
+		<time>{{$rec.CollectDate.Format "2006-01-02 15:04"}}:</time>
+		<a href="{{$rec.Url}}" target="_blank">{{$rec.Title}}</a>
+		<cite>({{$rec.Source}})</cite>
+	  </article>
+	  {{- end -}}
+	</main>
+  </body>
+</html>
