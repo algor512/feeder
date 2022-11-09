@@ -5,6 +5,7 @@ all: bin/feeder
 clean:
 	rm -Rf bin
 
+bin/feeder: export CGO_ENABLED=0
 bin/feeder: config.go
 	mkdir -p bin
 	go build -o bin/feeder
