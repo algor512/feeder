@@ -53,6 +53,7 @@ func RequestLogger(hdl http.Handler) http.Handler {
 func main() {
 	listen := flag.String("listen", "", "listen address")
 	database := flag.String("db", "records.json", "database file")
+	config := flag.String("cfg", "config.rec", "config file")
 	location := flag.String("loc", "Europe/Moscow", "location")
 	useHTTPS := flag.Bool("https", false, "use https")
 	cer := flag.String("cer", "", "path to cer file")
@@ -62,6 +63,11 @@ func main() {
 	period := flag.Int("period", 14, "data storage period (in days)")
 	flag.Parse();
 
+	if len(*config) == 0 {
+		fmt.Fprintf(os.Stderr, "config file must be specified\n")
+		flag.PrintDefaults()
+		return
+	}
 	if len(*listen) == 0 {
 		fmt.Fprintf(os.Stderr, "listen address must be specified\n")
 		flag.PrintDefaults()
@@ -85,12 +91,18 @@ func main() {
 		panic(err)
 	}
 
+	sources, err := parseConfigFile(*config)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error while parsing config file")
+		panic(err)
+	}
+
 	provider, err := utils.NewFeedProvider(utils.FeedProviderCfg{
 		DatabaseFile: *database,
 		PageTemplate: pageTpl,
 		Frequency: time.Duration(*freq) * time.Minute,
 		Period: time.Duration(24 * *period) * time.Hour,
-		Sources: getConfig(),
+		Sources: sources,
 		Logger: log.Default(),
 	})
 	if err != nil {
