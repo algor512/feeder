@@ -20,30 +20,11 @@
 		  text-decoration: none;
 	  }
 
-	  nav {
+	  header {
 		  width: 90%;
-		  margin: 0 auto 0.5em auto;
-		  padding: 0;
-		  display: flex;
-		  flex-direction: row;
-	  }
-	  nav > a {
-		  display: block;
-		  flex-grow: 1;
-		  text-align: center;
-		  padding: 0.2em;
+		  margin: 0 auto 1em auto;
 		  color: #c0c0c0;
-		  background-color: #262626;
-	  }
-	  nav > a#active {
-		  color: #eeeeee;
-		  background-color: #333333;
-	  }
-	  nav > a:last-child {
-		  border-radius: 0 10px 0 0;
-	  }
-	  nav > a:first-child {
-		  border-radius: 10px 0 0 0;
+		  font-size: smaller;
 	  }
 
 	  main {
@@ -73,7 +54,7 @@
 		  body {
 			  font-size: 12pt;
 		  }
-		  nav {
+		  header {
 			  width: 98%;
 		  }
 		  main {
@@ -91,11 +72,16 @@
 	</style>
   </head>
   <body>
-	<nav>
-		<a href="/rss"{{if (eq .CurrentPage "rss")}} id="active"{{end}}>RSS</a>
-		<a href="/youtube"{{if (eq .CurrentPage "youtube")}} id="active"{{end}}>YouTube</a>
-		<a href="/telegram"{{if (eq .CurrentPage "telegram")}} id="active"{{end}}>Telegram</a>
-	</nav>
+	{{- if .StatusPresented -}}
+	<header>
+	  Last update at {{.StatusDate.Local.Format "2006-01-02 15:04"}},
+	  {{.StatusSourcesNumConfigured}} feeds were updates with {{.StatusSourcesNumErrors}} errors.
+	  {{- if .StatusSourcesErrorList -}}
+	  <br>Errors have occurred in the following feeds:
+      {{ range $index, $element := .StatusSourcesErrorList}}{{if $index}},{{end}} {{$element}}{{end}}
+	  {{- end -}}
+	</header>
+	{{- end -}}
 	<main>
 	  {{- $prevDay := -1 -}}
 	  {{- $curDay := -1 -}}
@@ -103,7 +89,7 @@
 	  {{- $curDay = $rec.Date.Local.YearDay -}}
 	  {{ if and (ge $prevDay 0) (ne $curDay $prevDay) }}<hr />{{ end }}
 	  {{ $prevDay = $curDay }}
-	  <article class="{{range $c := $rec.Tags}}{{$c}} {{end}}">
+	  <article>
 		<time>{{$rec.Date.Local.Format "2006-01-02 15:04"}}:</time>
 		<a href="{{$rec.Url}}" target="_blank">{{$rec.Title}}</a>
 		<cite>({{$rec.Source}})</cite>

@@ -1,19 +1,16 @@
-module github.com/algor512/feeder
+module feeder
 
-go 1.18
+go 1.23.6
 
-require (
-	github.com/mattn/go-sqlite3 v1.14.15
-	github.com/mmcdole/gofeed v1.1.3
-	golang.org/x/net v0.0.0-20220812174116-3211cb980234
-)
+require github.com/mmcdole/gofeed v1.3.0
 
 require (
-	github.com/PuerkitoBio/goquery v1.5.1 // indirect
-	github.com/andybalholm/cascadia v1.1.0 // indirect
-	github.com/json-iterator/go v1.1.10 // indirect
-	github.com/mmcdole/goxpp v0.0.0-20181012175147-0068e33feabf // indirect
-	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
-	github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 // indirect
-	golang.org/x/text v0.3.7 // indirect
+	github.com/PuerkitoBio/goquery v1.8.0 // indirect
+	github.com/andybalholm/cascadia v1.3.1 // indirect
+	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/mmcdole/goxpp v1.1.1-0.20240225020742-a0c311522b23 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
+	golang.org/x/net v0.4.0 // indirect
+	golang.org/x/text v0.5.0 // indirect
 )

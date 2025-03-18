@@ -1,14 +1,15 @@
+OS        = linux
+ARCH      = amd64
+
 .PHONY: all
-all: bin/feeder
+all: bin/parse_feeds bin/update_page
 
 .PHONY: clean
 clean:
 	rm -Rf bin
 
-bin/feeder: export CGO_ENABLED=0
-bin/feeder: config.go
-	mkdir -p bin
-	go build -o bin/feeder
+bin/parse_feeds: cmd/parse_feeds/main.go
+	GOOS=$(OS) GOARCH=$(ARCH) go build -o bin/parse_feeds ./cmd/parse_feeds
 
-config.go:
-	cp config.go.def config.go
+bin/update_page: cmd/update_page/main.go
+	GOOS=$(OS) GOARCH=$(ARCH) go build -o bin/update_page ./cmd/update_page
